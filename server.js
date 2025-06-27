@@ -12,7 +12,7 @@ const port = 3000; // Puerto donde correrá tu backend
 
 // Configura CORS para permitir que tu frontend (localhost:8000) acceda a este backend
 app.use(cors({
-    origin: ['http://localhost:8000', 'http://localhost:8080'] // Permite ambos puertos
+    origin: ['https://fronted-poetas.vercel.app/', 'http://localhost:8080'] // Permite ambos puertos
 }));
 
 // Middleware para parsear JSON en el cuerpo de las solicitudes
@@ -62,5 +62,5 @@ app.post('/generate-biography', async (req, res) => {
 
 // Inicia el servidor
 app.listen(port, () => {
-    console.log(`Backend server listening at http://localhost:${port}`);
+    console.log(`Backend server listening at https://fronted-poetas.vercel.app/`);
 });
