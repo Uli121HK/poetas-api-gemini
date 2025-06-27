@@ -1,14 +1,17 @@
 // backend/server.js
 import express from 'express';
 import cors from 'cors';
-// Importa la nueva librería de Google Gemini
 import { GoogleGenerativeAI } from '@google/generative-ai'; 
 import dotenv from 'dotenv';
 
 dotenv.config(); // Carga las variables de entorno desde .env
 
 const app = express();
-const port = 3000; // Puerto donde correrá tu backend
+// ***************************************************************
+// ****** CORRECCIÓN CRÍTICA: USAR process.env.PORT PARA RENDER ******
+// El puerto 3000 es solo para desarrollo local.
+const port = process.env.PORT || 3000; 
+// ***************************************************************
 
 // Configura CORS para permitir que tu frontend acceda a este backend
 app.use(cors({
@@ -30,7 +33,6 @@ app.use(express.json());
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 // Define el modelo a usar (puedes probar 'gemini-pro', 'gemini-2.5-flash', etc.)
-// Recomiendo 'gemini-1.5-flash-latest' o 'gemini-1.5-pro-latest' para mejores resultados
 const model = genAI.getGenerativeModel({ 
     model: 'gemini-2.0-flash',
     config: {
@@ -40,6 +42,7 @@ const model = genAI.getGenerativeModel({
 });
 
 // Ruta POST para generar la biografía
+// Tu frontend está haciendo la solicitud a este endpoint: /generate-biography
 app.post('/generate-biography', async (req, res) => {
     const { poetName } = req.body; // Obtiene el nombre del poeta del cuerpo de la solicitud
 
@@ -66,7 +69,10 @@ app.post('/generate-biography', async (req, res) => {
     }
 });
 
-// Inicia el servidor
+// ***************************************************************
+// ****** CORRECCIÓN CRÍTICA: El servidor escucha en el puerto correcto ******
+// ***************************************************************
 app.listen(port, () => {
-    console.log(`Servidor backend escuchando en https://backend-poetas.onrender.com`);
+    console.log(`Servidor backend escuchando en http://localhost:${port}`);
+    // En Render, este console.log mostrará el puerto dinámico asignado.
 });
