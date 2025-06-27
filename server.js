@@ -10,9 +10,16 @@ dotenv.config(); // Carga las variables de entorno desde .env
 const app = express();
 const port = 3000; // Puerto donde correrá tu backend
 
-// Configura CORS para permitir que tu frontend (localhost:8000) acceda a este backend
+// Configura CORS para permitir que tu frontend acceda a este backend
 app.use(cors({
-    origin: ['https://backend-poetas.onrender.com'] // Permite ambos puertos
+    // La lista 'origin' debe contener las URLs EXACTAS desde donde tu frontend hará solicitudes.
+    // NO debe ser la URL del propio backend.
+    origin: [
+        'http://localhost:8000',             // Para desarrollo local del frontend (si usas puerto 8000)
+        'http://localhost:8080',             // Para desarrollo local del frontend (si usas puerto 8080)
+        'https://fronted-poetas.vercel.app'  // ¡TU URL DE FRONTEND EN VERCEL!
+        // Añade aquí cualquier otro dominio exacto donde tu frontend pueda estar alojado
+    ]
 }));
 
 // Middleware para parsear JSON en el cuerpo de las solicitudes
@@ -30,8 +37,7 @@ const model = genAI.getGenerativeModel({
       maxOutputTokens: 500,
       temperature: 0.1,
     },
-}); 
-
+});
 
 // Ruta POST para generar la biografía
 app.post('/generate-biography', async (req, res) => {
@@ -54,13 +60,13 @@ app.post('/generate-biography', async (req, res) => {
         console.error('Error al llamar a la API de Google Gemini:', error);
         // Envía un mensaje de error detallado al frontend
         res.status(500).json({ 
-            error: 'Error al generar la biografía desde el servidor con Gemini.', 
-            details: error.message 
+            error: 'Error al generar la biografía desde el servidor con Gemini.',
+            details: error.message // Proporciona detalles del error para depuración
         });
     }
 });
 
 // Inicia el servidor
 app.listen(port, () => {
-    console.log(`Backend server listening at https://fronted-poetas.vercel.app/`);
+    console.log(`Servidor backend escuchando en http://localhost:${port}`);
 });
