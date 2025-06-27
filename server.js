@@ -68,5 +68,5 @@ app.post('/generate-biography', async (req, res) => {
 
 // Inicia el servidor
 app.listen(port, () => {
-    console.log(`Servidor backend escuchando en http://localhost:${port}`);
+    console.log(`Servidor backend escuchando en https://backend-poetas.onrender.com`);
 });
